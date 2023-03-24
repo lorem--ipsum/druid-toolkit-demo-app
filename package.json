@@ -1,0 +1,33 @@
+{
+  "name": "dt-demo-app",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "volta": {
+    "node": "16.15.1"
+  },
+  "dependencies": {
+    "@druid-toolkit/query": "^0.20.7",
+    "@druid-toolkit/visuals-core": "^0.3.9",
+    "@druid-toolkit/visuals-react": "^0.3.8",
+    "@types/node": "20.5.4",
+    "@types/react": "18.2.21",
+    "@types/react-dom": "18.2.7",
+    "d3": "^7.8.5",
+    "echarts": "^5.4.3",
+    "eslint": "8.47.0",
+    "eslint-config-next": "13.4.19",
+    "next": "13.4.19",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "typescript": "5.2.2"
+  },
+  "devDependencies": {
+    "@types/d3": "^7.4.0"
+  }
+}
