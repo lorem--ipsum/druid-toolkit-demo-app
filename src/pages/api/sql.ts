@@ -5,6 +5,15 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<any>
 ) {
+  const { forceError, ...payload } = JSON.parse(req.body);
+
+  if (forceError === true) {
+    res.status(500).json({
+      error: "Forced error",
+    });
+    return;
+  }
+
   const r = await fetch("https://imply.api.imply.io/v1/query/sql", {
     method: "POST",
     headers: {
@@ -12,7 +21,7 @@ export default async function handler(
       Accept: "application/json",
       Authorization: `Basic ${POLARIS_API_KEY}:`,
     },
-    body: req.body,
+    body: JSON.stringify(payload),
   });
 
   // const r = await fetch("http://localhost:8888/druid/v2/sql", {

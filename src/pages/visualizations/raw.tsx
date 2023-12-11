@@ -4,12 +4,13 @@ import { createRoot, Root } from "react-dom/client";
 export const Raw = typedVisualModule({
   parameters: {},
   module: ({ container, host }) => {
-    let root: Root;
+    const rootContainer = document.createElement("div");
+    container.appendChild(rootContainer);
+
+    let root = createRoot(rootContainer);
 
     return {
       async update({ table, where }) {
-        root = root ?? createRoot(container);
-
         const result = await host.sqlQuery(
           `SELECT *
             FROM ${table}
@@ -34,9 +35,18 @@ export const Raw = typedVisualModule({
           </div>
         );
       },
-      destroy() {
-        root.unmount();
+      async destroy() {
+        await unmountReactComponentAtNode(root);
       },
     };
   },
 });
+
+async function unmountReactComponentAtNode(root: Root) {
+  return new Promise<void>((resolve) => {
+    requestAnimationFrame(() => {
+      root.unmount();
+      resolve();
+    });
+  });
+}

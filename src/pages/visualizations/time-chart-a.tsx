@@ -1,14 +1,5 @@
 import { typedVisualModule } from "@druid-toolkit/visuals-core";
-import {
-  C,
-  F,
-  L,
-  SqlColumn,
-  SqlExpression,
-  SqlFromClause,
-  SqlJoinPart,
-  SqlQuery,
-} from "@druid-toolkit/query";
+import { C, SqlColumn, SqlExpression } from "@druid-toolkit/query";
 import * as echarts from "echarts";
 
 export const TimeChartA = typedVisualModule({
@@ -173,7 +164,7 @@ export const TimeChartA = typedVisualModule({
         myChart?.resize();
       },
       destroy() {
-        myChart.dispose();
+        myChart?.dispose();
       },
     };
   },
