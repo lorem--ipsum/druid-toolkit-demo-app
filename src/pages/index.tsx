@@ -1,20 +1,22 @@
 import Head from "next/head";
 import styles from "@/styles/Home.module.css";
+import "@wojtekmaj/react-daterange-picker/dist/DateRangePicker.css";
+import "react-calendar/dist/Calendar.css";
 import {
   ExpressionMeta,
-  Host,
   VisualModuleDefinition,
 } from "@druid-toolkit/visuals-core";
-import { useHost, useModuleContainer } from "@druid-toolkit/visuals-react";
+import { useHost } from "@druid-toolkit/visuals-react";
 import { SqlExpression, T } from "@druid-toolkit/query";
 
 import { PieChart } from "./visualizations/pie-chart";
 import { BarChart } from "./visualizations/bar-chart";
 import { TimeChart } from "./visualizations/time-chart";
-import { RefObject, memo, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { TimeChartA } from "./visualizations/time-chart-a";
 import { TimeChartB } from "./visualizations/time-chart-b";
 import { Raw } from "./visualizations/raw";
+import { ModuleContainer, WhereTimeClauseEditor } from "./components";
 
 const VISUAL_MODULES: Record<string, VisualModuleDefinition<any>> = {
   pie_chart: PieChart,
@@ -25,17 +27,18 @@ const VISUAL_MODULES: Record<string, VisualModuleDefinition<any>> = {
   raw: Raw,
 };
 
+const TIME_COLUMN = "__time";
+
 const DEFAULT_WHERE = SqlExpression.parse(
-  `TIME_SHIFT(CURRENT_TIMESTAMP, 'P1W', -1) <= __time AND __time < CURRENT_TIMESTAMP`
+  `TIME_SHIFT(CURRENT_TIMESTAMP, 'P1W', -1) <= ${TIME_COLUMN} AND ${TIME_COLUMN} < CURRENT_TIMESTAMP`
 );
 
 async function queryDruidSql<T = any>(
-  sqlQueryPayload: Record<string, any>,
-  forceError = false
+  sqlQueryPayload: Record<string, any>
 ): Promise<T[]> {
   const response = await fetch("api/sql", {
     method: "POST",
-    body: JSON.stringify({ ...sqlQueryPayload, forceError }),
+    body: JSON.stringify(sqlQueryPayload),
   });
 
   const j = await response.json();
@@ -51,8 +54,8 @@ export default function Home() {
   const selectedModules = useMemo(
     () => [
       { type: "time_chart_a", id: "a" },
-      // { type: "time_chart_b", id: "b" },
-      // { type: "raw", id: "c" },
+      { type: "time_chart_b", id: "b" },
+      { type: "raw", id: "c" },
     ],
     []
   );
@@ -65,13 +68,12 @@ export default function Home() {
     };
   });
 
-  const [forceServerError, setForceServerError] = useState(false);
   const [loadIndex, setLoadIndex] = useState(0);
 
   const [where, setWhere] = useState<SqlExpression>(DEFAULT_WHERE);
 
   const { host, setModulesWhere } = useHost({
-    sqlQuery: (q) => queryDruidSql(q, forceServerError),
+    sqlQuery: queryDruidSql,
     visualModules: VISUAL_MODULES,
     selectedModules,
     moduleStates: {
@@ -120,31 +122,11 @@ export default function Home() {
       </Head>
       <main className={styles.main}>
         <div className={styles.whereClause}>
-          {where.toString() !== "TRUE" ? (
-            where.toString()
-          ) : (
-            <i style={{ color: "lightgrey" }}>#nofilter</i>
-          )}
-          {where.toString() !== DEFAULT_WHERE.toString() && (
-            <button
-              style={{ marginLeft: 20 }}
-              onClick={() => setWhere(DEFAULT_WHERE)}
-            >
-              Clear
-            </button>
-          )}
-          <label>
-            <input
-              type="checkbox"
-              checked={forceServerError}
-              style={{ marginLeft: 20 }}
-              onChange={(e) => {
-                setForceServerError(e.target.checked);
-                setLoadIndex(loadIndex + 1);
-              }}
-            />
-            Error mode
-          </label>
+          <WhereTimeClauseEditor
+            where={where}
+            onChange={setWhere}
+            timeColumn={TIME_COLUMN}
+          />
         </div>
         <div className={styles.visualizations}>
           {selectedModules.map((s) => (
@@ -160,26 +142,3 @@ export default function Home() {
     </>
   );
 }
-
-const ModuleContainer = memo(function ModuleContainer(props: {
-  selectedModule: { id: string; type: string };
-  host: Host;
-  columns: ExpressionMeta[];
-}) {
-  const { selectedModule, host, columns } = props;
-
-  const [ref, _update, error] = useModuleContainer({
-    selectedModule,
-    host,
-    columns,
-  });
-
-  return (
-    <div
-      className={error ? styles.moduleContainerError : styles.moduleContainer}
-    >
-      <div className={styles.visualization} ref={ref} />
-      {error && <div className={styles.error}>{String(error)}</div>}
-    </div>
-  );
-});
