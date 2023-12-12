@@ -12,20 +12,20 @@
     "node": "18.17.0"
   },
   "dependencies": {
-    "@druid-toolkit/query": "^0.21.6",
+    "@druid-toolkit/query": "^0.21.8",
     "@druid-toolkit/visuals-core": "^0.4.4",
-    "@druid-toolkit/visuals-react": "^0.4.1",
-    "@types/node": "20.10.3",
-    "@types/react": "18.2.42",
+    "@druid-toolkit/visuals-react": "^0.4.2",
+    "@types/node": "20.10.4",
+    "@types/react": "18.2.43",
     "@types/react-dom": "18.2.17",
     "d3": "^7.8.5",
     "echarts": "^5.4.3",
     "eslint": "8.55.0",
-    "eslint-config-next": "14.0.3",
-    "next": "14.0.3",
+    "eslint-config-next": "14.0.4",
+    "next": "14.0.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "typescript": "5.3.2"
+    "typescript": "5.3.3"
   },
   "devDependencies": {
     "@types/d3": "^7.4.3"
