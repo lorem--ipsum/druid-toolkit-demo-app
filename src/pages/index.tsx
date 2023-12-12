@@ -1,5 +1,4 @@
 import Head from "next/head";
-import { ChakraProvider } from "@chakra-ui/react";
 import styled from "@emotion/styled";
 import {
   ExpressionMeta,
@@ -7,8 +6,6 @@ import {
 } from "@druid-toolkit/visuals-core";
 import { useHost } from "@druid-toolkit/visuals-react";
 import { SqlExpression, T } from "@druid-toolkit/query";
-import "@wojtekmaj/react-daterange-picker/dist/DateRangePicker.css";
-import "react-calendar/dist/Calendar.css";
 import { useEffect, useMemo, useState } from "react";
 
 import { PieChart } from "./visualizations/pie-chart";
@@ -154,25 +151,23 @@ export default function Home() {
         <title>My awesome dashboard</title>
       </Head>
       <Main>
-        <ChakraProvider resetCSS={false}>
-          <WhereClause>
-            <WhereTimeClauseEditor
-              where={where}
-              onChange={setWhere}
-              timeColumn={TIME_COLUMN}
+        <WhereClause>
+          <WhereTimeClauseEditor
+            where={where}
+            onChange={setWhere}
+            timeColumn={TIME_COLUMN}
+          />
+        </WhereClause>
+        <Visualizations>
+          {selectedModules.map((s) => (
+            <ModuleContainer
+              key={s.id}
+              selectedModule={s}
+              host={host}
+              columns={columns[s.id]}
             />
-          </WhereClause>
-          <Visualizations>
-            {selectedModules.map((s) => (
-              <ModuleContainer
-                key={s.id}
-                selectedModule={s}
-                host={host}
-                columns={columns[s.id]}
-              />
-            ))}
-          </Visualizations>
-        </ChakraProvider>
+          ))}
+        </Visualizations>
       </Main>
     </>
   );

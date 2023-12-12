@@ -1,3 +1,5 @@
+import "@wojtekmaj/react-daterange-picker/dist/DateRangePicker.css";
+import "react-calendar/dist/Calendar.css";
 import { TimeIntervalFilterPattern } from "@druid-toolkit/query";
 import dynamic from "next/dynamic";
 // importing this directly doesn't play well with Next's SSR ¯\_(ツ)_/¯

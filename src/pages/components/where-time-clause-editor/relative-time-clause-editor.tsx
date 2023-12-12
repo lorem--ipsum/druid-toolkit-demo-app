@@ -23,12 +23,7 @@ export const RelativeTimeClauseEditor = memo(function RelativeTimeClauseEditor(
   );
 
   return (
-    <Select
-      width="200px"
-      size="sm"
-      value={pattern.rangeDuration}
-      onChange={onDurationChange}
-    >
+    <Select size="sm" value={pattern.rangeDuration} onChange={onDurationChange}>
       <option value="PT6H">Last 6 hours</option>
       <option value="P1D">Last day</option>
       <option value="P1W">Last week</option>
