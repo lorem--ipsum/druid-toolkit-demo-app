@@ -1,1 +1,1 @@
-export * from "./where-time-clause-editor";
+export { WhereTimeClauseEditor } from "./where-time-clause-editor";

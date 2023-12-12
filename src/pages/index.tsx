@@ -1,5 +1,5 @@
 import Head from "next/head";
-import styles from "@/styles/Home.module.css";
+import styled from "@emotion/styled";
 import "@wojtekmaj/react-daterange-picker/dist/DateRangePicker.css";
 import "react-calendar/dist/Calendar.css";
 import {
@@ -17,6 +17,39 @@ import { TimeChartA } from "./visualizations/time-chart-a";
 import { TimeChartB } from "./visualizations/time-chart-b";
 import { Raw } from "./visualizations/raw";
 import { ModuleContainer, WhereTimeClauseEditor } from "./components";
+
+const Main = styled.main`
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+
+  padding: 20px;
+
+  font-family: sans-serif;
+  background-color: rgb(14 39 68 / 16%);
+
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  overflow: auto;
+`;
+
+const WhereClause = styled.div`
+  background-color: white;
+  box-shadow: 0 1px 3px rgba(14, 39, 68, 0.12);
+  padding: 20px;
+  height: 20px;
+  border-radius: 3px;
+`;
+
+const Visualizations = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  grid-gap: 16px;
+  flex: 1;
+`;
 
 const VISUAL_MODULES: Record<string, VisualModuleDefinition<any>> = {
   pie_chart: PieChart,
@@ -120,15 +153,15 @@ export default function Home() {
       <Head>
         <title>My awesome dashboard</title>
       </Head>
-      <main className={styles.main}>
-        <div className={styles.whereClause}>
+      <Main>
+        <WhereClause>
           <WhereTimeClauseEditor
             where={where}
             onChange={setWhere}
             timeColumn={TIME_COLUMN}
           />
-        </div>
-        <div className={styles.visualizations}>
+        </WhereClause>
+        <Visualizations>
           {selectedModules.map((s) => (
             <ModuleContainer
               key={s.id}
@@ -137,8 +170,8 @@ export default function Home() {
               columns={columns[s.id]}
             />
           ))}
-        </div>
-      </main>
+        </Visualizations>
+      </Main>
     </>
   );
 }

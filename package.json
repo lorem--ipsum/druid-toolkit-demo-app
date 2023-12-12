@@ -12,9 +12,12 @@
     "node": "18.17.0"
   },
   "dependencies": {
+    "@chakra-ui/react": "^2.8.2",
     "@druid-toolkit/query": "^0.21.8",
     "@druid-toolkit/visuals-core": "^0.4.4",
     "@druid-toolkit/visuals-react": "^0.4.2",
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
     "@types/node": "20.10.4",
     "@types/react": "18.2.43",
     "@types/react-dom": "18.2.17",
@@ -23,6 +26,7 @@
     "echarts": "^5.4.3",
     "eslint": "8.55.0",
     "eslint-config-next": "14.0.4",
+    "framer-motion": "^10.16.16",
     "luxon": "^3.4.4",
     "next": "14.0.4",
     "react": "18.2.0",
