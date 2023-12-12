@@ -1,18 +1,19 @@
 import Head from "next/head";
+import { ChakraProvider } from "@chakra-ui/react";
 import styled from "@emotion/styled";
-import "@wojtekmaj/react-daterange-picker/dist/DateRangePicker.css";
-import "react-calendar/dist/Calendar.css";
 import {
   ExpressionMeta,
   VisualModuleDefinition,
 } from "@druid-toolkit/visuals-core";
 import { useHost } from "@druid-toolkit/visuals-react";
 import { SqlExpression, T } from "@druid-toolkit/query";
+import "@wojtekmaj/react-daterange-picker/dist/DateRangePicker.css";
+import "react-calendar/dist/Calendar.css";
+import { useEffect, useMemo, useState } from "react";
 
 import { PieChart } from "./visualizations/pie-chart";
 import { BarChart } from "./visualizations/bar-chart";
 import { TimeChart } from "./visualizations/time-chart";
-import { useEffect, useMemo, useState } from "react";
 import { TimeChartA } from "./visualizations/time-chart-a";
 import { TimeChartB } from "./visualizations/time-chart-b";
 import { Raw } from "./visualizations/raw";
@@ -40,7 +41,6 @@ const WhereClause = styled.div`
   background-color: white;
   box-shadow: 0 1px 3px rgba(14, 39, 68, 0.12);
   padding: 20px;
-  height: 20px;
   border-radius: 3px;
 `;
 
@@ -154,23 +154,25 @@ export default function Home() {
         <title>My awesome dashboard</title>
       </Head>
       <Main>
-        <WhereClause>
-          <WhereTimeClauseEditor
-            where={where}
-            onChange={setWhere}
-            timeColumn={TIME_COLUMN}
-          />
-        </WhereClause>
-        <Visualizations>
-          {selectedModules.map((s) => (
-            <ModuleContainer
-              key={s.id}
-              selectedModule={s}
-              host={host}
-              columns={columns[s.id]}
+        <ChakraProvider resetCSS={false}>
+          <WhereClause>
+            <WhereTimeClauseEditor
+              where={where}
+              onChange={setWhere}
+              timeColumn={TIME_COLUMN}
             />
-          ))}
-        </Visualizations>
+          </WhereClause>
+          <Visualizations>
+            {selectedModules.map((s) => (
+              <ModuleContainer
+                key={s.id}
+                selectedModule={s}
+                host={host}
+                columns={columns[s.id]}
+              />
+            ))}
+          </Visualizations>
+        </ChakraProvider>
       </Main>
     </>
   );
