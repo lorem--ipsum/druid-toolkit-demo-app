@@ -6,14 +6,15 @@ import {
 import { memo, useCallback } from "react";
 import { AbsoluteTimeClauseEditor } from "./absolute-time-clause-editor";
 import { RelativeTimeClauseEditor } from "./relative-time-clause-editor";
-import { FormControl, FormLabel, Switch } from "@chakra-ui/react";
 import { DateTime, Duration } from "luxon";
+import { InputSwitch, InputSwitchChangeEvent } from "primereact/inputswitch";
 import styled from "@emotion/styled";
 
 const WhereEditor = styled.div`
   display: flex;
   flex-direction: row;
-  gap: 8px;
+  gap: 16px;
+  align-items: center;
 `;
 
 interface WhereTimeClauseEditorProps {
@@ -35,10 +36,8 @@ export const WhereTimeClauseEditor = memo(function WhereTimeClauseEditor(
   })[0];
 
   const onTypeChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const newValue = e.target.checked;
-
-      if (newValue) {
+    (e: InputSwitchChangeEvent) => {
+      if (e.value) {
         onChange(
           filterPatternToExpression({
             type: "timeRelative",
@@ -73,35 +72,26 @@ export const WhereTimeClauseEditor = memo(function WhereTimeClauseEditor(
 
   return (
     <WhereEditor>
-      <FormControl display="flex" alignItems="center" width="200px">
-        <FormLabel htmlFor="relative-time" mb="0">
-          Relative time filter
-        </FormLabel>
-        <Switch
-          id="relative-time"
-          size="sm"
-          isChecked={timeClause.type === "timeRelative"}
-          onChange={onTypeChange}
+      <InputSwitch
+        checked={timeClause.type === "timeRelative"}
+        onChange={onTypeChange}
+      />
+      {timeClause.type === "timeInterval" && (
+        <AbsoluteTimeClauseEditor
+          pattern={timeClause}
+          onChange={(pattern) => {
+            onChange(filterPatternToExpression(pattern));
+          }}
         />
-      </FormControl>
-      <FormControl display="flex" alignItems="center" width="200px">
-        {timeClause.type === "timeInterval" && (
-          <AbsoluteTimeClauseEditor
-            pattern={timeClause}
-            onChange={(pattern) => {
-              onChange(filterPatternToExpression(pattern));
-            }}
-          />
-        )}
-        {timeClause.type === "timeRelative" && (
-          <RelativeTimeClauseEditor
-            pattern={timeClause}
-            onChange={(pattern) => {
-              onChange(filterPatternToExpression(pattern));
-            }}
-          />
-        )}
-      </FormControl>
+      )}
+      {timeClause.type === "timeRelative" && (
+        <RelativeTimeClauseEditor
+          pattern={timeClause}
+          onChange={(pattern) => {
+            onChange(filterPatternToExpression(pattern));
+          }}
+        />
+      )}
     </WhereEditor>
   );
 });

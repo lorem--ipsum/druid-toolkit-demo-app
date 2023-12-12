@@ -12,14 +12,11 @@
     "node": "18.17.0"
   },
   "dependencies": {
-    "@chakra-ui/next-js": "^2.2.0",
-    "@chakra-ui/react": "^2.8.2",
     "@druid-toolkit/query": "^0.21.8",
     "@druid-toolkit/visuals-core": "^0.4.4",
     "@druid-toolkit/visuals-react": "^0.4.2",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
-    "@wojtekmaj/react-daterange-picker": "^5.5.0",
     "d3": "^7.8.5",
     "echarts": "^5.4.3",
     "eslint": "8.55.0",
@@ -27,6 +24,7 @@
     "framer-motion": "^10.16.16",
     "luxon": "^3.4.4",
     "next": "14.0.4",
+    "primereact": "^10.2.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "typescript": "5.3.3"

@@ -1,4 +1,6 @@
 import Head from "next/head";
+import { PrimeReactProvider } from "primereact/api";
+import "primereact/resources/themes/mira/theme.css";
 import styled from "@emotion/styled";
 import {
   ExpressionMeta,
@@ -150,25 +152,27 @@ export default function Home() {
       <Head>
         <title>My awesome dashboard</title>
       </Head>
-      <Main>
-        <WhereClause>
-          <WhereTimeClauseEditor
-            where={where}
-            onChange={setWhere}
-            timeColumn={TIME_COLUMN}
-          />
-        </WhereClause>
-        <Visualizations>
-          {selectedModules.map((s) => (
-            <ModuleContainer
-              key={s.id}
-              selectedModule={s}
-              host={host}
-              columns={columns[s.id]}
+      <PrimeReactProvider>
+        <Main>
+          <WhereClause>
+            <WhereTimeClauseEditor
+              where={where}
+              onChange={setWhere}
+              timeColumn={TIME_COLUMN}
             />
-          ))}
-        </Visualizations>
-      </Main>
+          </WhereClause>
+          <Visualizations>
+            {selectedModules.map((s) => (
+              <ModuleContainer
+                key={s.id}
+                selectedModule={s}
+                host={host}
+                columns={columns[s.id]}
+              />
+            ))}
+          </Visualizations>
+        </Main>
+      </PrimeReactProvider>
     </>
   );
 }

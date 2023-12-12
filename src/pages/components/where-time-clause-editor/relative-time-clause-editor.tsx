@@ -1,6 +1,6 @@
-import { Select } from "@chakra-ui/react";
 import { TimeRelativeFilterPattern } from "@druid-toolkit/query";
-import { memo, useCallback } from "react";
+import { memo, useCallback, useMemo } from "react";
+import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
 
 interface RelativeTimeClauseEditorProps {
   pattern: TimeRelativeFilterPattern;
@@ -13,7 +13,7 @@ export const RelativeTimeClauseEditor = memo(function RelativeTimeClauseEditor(
   const { pattern, onChange } = props;
 
   const onDurationChange = useCallback(
-    (e: React.ChangeEvent<HTMLSelectElement>) => {
+    (e: DropdownChangeEvent) => {
       onChange({
         ...pattern,
         rangeDuration: e.target.value,
@@ -22,13 +22,22 @@ export const RelativeTimeClauseEditor = memo(function RelativeTimeClauseEditor(
     [pattern, onChange]
   );
 
+  const options = useMemo(() => {
+    return [
+      { label: "Last 6 hours", value: "PT6H" },
+      { label: "Last day", value: "P1D" },
+      { label: "Last week", value: "P1W" },
+      { label: "Last month", value: "P1M" },
+      { label: "Last year", value: "P1Y" },
+    ];
+  }, []);
+
   return (
-    <Select size="sm" value={pattern.rangeDuration} onChange={onDurationChange}>
-      <option value="PT6H">Last 6 hours</option>
-      <option value="P1D">Last day</option>
-      <option value="P1W">Last week</option>
-      <option value="P1M">Last month</option>
-      <option value="P1Y">Last year</option>
-    </Select>
+    <Dropdown
+      value={pattern.rangeDuration}
+      onChange={onDurationChange}
+      options={options}
+      optionLabel="label"
+    />
   );
 });

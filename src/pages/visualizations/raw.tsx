@@ -5,6 +5,7 @@ export const Raw = typedVisualModule({
   parameters: {},
   module: ({ container, host }) => {
     const rootContainer = document.createElement("div");
+    rootContainer.setAttribute("style", "height: 100%; width: 100%;");
     container.appendChild(rootContainer);
 
     let root = createRoot(rootContainer);
@@ -23,7 +24,7 @@ export const Raw = typedVisualModule({
         root.render(
           <div
             style={{
-              height: 400,
+              height: "100%",
               width: "100%",
               overflow: "auto",
               fontSize: "9px",
