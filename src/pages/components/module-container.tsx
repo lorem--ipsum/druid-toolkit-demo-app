@@ -4,7 +4,9 @@ import { useModuleContainer } from "@druid-toolkit/visuals-react";
 import { memo } from "react";
 
 const Container = styled.div<{ inError?: boolean }>((props) => ({
+  position: "relative",
   backgroundColor: "white",
+
   boxShadow: "0 1px 3px rgba(14, 39, 68, 0.12)",
   padding: "20px",
   height: "400px",
@@ -18,6 +20,14 @@ const Visualization = styled.div`
   height: 100%;
   width: 100%;
 `;
+
+const VizError = styled.div(() => ({
+  backgroundColor: "#c30b0bb0",
+  color: "white",
+  padding: "20px",
+  position: "absolute",
+  inset: 0,
+}));
 
 export const ModuleContainer = memo(function ModuleContainer(props: {
   selectedModule: { id: string; type: string };
@@ -35,7 +45,7 @@ export const ModuleContainer = memo(function ModuleContainer(props: {
   return (
     <Container inError={!!error}>
       <Visualization ref={ref} />
-      {error && <div>{String(error)}</div>}
+      {error && <VizError>{String(error)}</VizError>}
     </Container>
   );
 });
