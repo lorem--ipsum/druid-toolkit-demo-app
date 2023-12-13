@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import { Host, ExpressionMeta } from "@druid-toolkit/visuals-core";
 import { useModuleContainer } from "@druid-toolkit/visuals-react";
+import { ProgressBar } from "primereact/progressbar";
 import { memo } from "react";
 
 const Container = styled.div<{ inError?: boolean }>((props) => ({
@@ -36,7 +37,7 @@ export const ModuleContainer = memo(function ModuleContainer(props: {
 }) {
   const { selectedModule, host, columns } = props;
 
-  const [ref, _update, error] = useModuleContainer({
+  const { ref, error, status } = useModuleContainer({
     selectedModule,
     host,
     columns,
@@ -46,6 +47,18 @@ export const ModuleContainer = memo(function ModuleContainer(props: {
     <Container inError={!!error}>
       <Visualization ref={ref} />
       {error && <VizError>{String(error)}</VizError>}
+      {status !== "idle" && (
+        <ProgressBar
+          mode="indeterminate"
+          style={{
+            height: "2px",
+            position: "absolute",
+            left: 0,
+            right: 0,
+            top: 0,
+          }}
+        />
+      )}
     </Container>
   );
 });

@@ -3,40 +3,19 @@ import { C, L, SqlFunction } from "@druid-toolkit/query";
 import * as echarts from "echarts";
 
 export const PieChart = typedVisualModule({
-  parameters: {
-    selectClause: {
-      type: "string",
-    },
-  },
+  parameters: {},
   module: ({ container, host, updateWhere, getLastUpdateEvent }) => {
     const myChart = echarts.init(container);
 
-    const resizeHandler = () => {
-      myChart.resize();
-    };
-
-    window.addEventListener("resize", resizeHandler);
-
-    myChart.on("click", "series.pie", (params) => {
-      const where = getLastUpdateEvent()?.where;
-      if (!where) return;
-
-      updateWhere(
-        where.toggleClauseInWhere(C("country").equal(L(params.name)))
-      );
-    });
-
     return {
-      async update({ table, where, parameterValues }) {
-        const { selectClause } = parameterValues;
-
+      async update({ table, where }) {
         const data = (
           await host.sqlQuery(
-            `${selectClause}
+            `SELECT "org_name\" as "name", COUNT(*) AS "value"
             FROM ${table}
             WHERE ${where}
             GROUP BY 1
-            ORDER BY COUNT(*) DESC LIMIT 5`
+            ORDER BY COUNT(*) DESC LIMIT 10`
           )
         ).toObjectArray();
 
@@ -55,9 +34,10 @@ export const PieChart = typedVisualModule({
           ],
         });
       },
+      resize() {
+        myChart.resize();
+      },
       destroy() {
-        window.removeEventListener("resize", resizeHandler);
-        myChart.off("click");
         myChart.dispose();
       },
     };

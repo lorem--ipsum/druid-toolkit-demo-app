@@ -107,7 +107,7 @@ export const TimeChartA = typedVisualModule({
         const series = codes.map((sName) => {
           return {
             name: sName,
-            type: "bar",
+            type: "line",
             symbol: "none",
             stack: "Totals",
             smooth: true,

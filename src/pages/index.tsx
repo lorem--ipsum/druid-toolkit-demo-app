@@ -88,6 +88,7 @@ export default function Home() {
       { type: "time_chart_a", id: "a" },
       { type: "time_chart_b", id: "b" },
       { type: "raw", id: "c" },
+      { type: "pie_chart", id: "d" },
     ],
     []
   );
@@ -97,10 +98,11 @@ export default function Home() {
       a: [],
       b: [],
       c: [],
+      d: [],
     };
   });
 
-  const [loadIndex, setLoadIndex] = useState(0);
+  const [timezone, setTimezone] = useState("Etc/UTC");
 
   const [where, setWhere] = useState<SqlExpression>(DEFAULT_WHERE);
 
@@ -124,6 +126,11 @@ export default function Home() {
         table: T("HTTP Response Codes - Polaris"),
         where,
       },
+      d: {
+        parameterValues: {},
+        table: T("HTTP Response Codes - Polaris"),
+        where,
+      },
     },
     interceptors: {
       setModuleWhere: (moduleId, whereClause) => {
@@ -135,9 +142,9 @@ export default function Home() {
 
   useEffect(() => {
     host.store.setState((s) => ({
-      context: { ...s.context, loadIndex },
+      context: { ...s.context, timezone },
     }));
-  }, [loadIndex, host.store]);
+  }, [timezone, host.store]);
 
   useEffect(() => {
     const newWheres = selectedModules.map((m) => {
@@ -157,6 +164,8 @@ export default function Home() {
           <WhereClause>
             <WhereTimeClauseEditor
               where={where}
+              timezone={timezone}
+              onTimezoneChange={setTimezone}
               onChange={setWhere}
               timeColumn={TIME_COLUMN}
             />
